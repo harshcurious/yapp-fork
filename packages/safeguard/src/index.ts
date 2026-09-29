@@ -237,8 +237,9 @@ async function evaluate(
 	let judge: BudgetModel;
 	try {
 		judge = await resolveJudgeModel(ctx, config);
-	} catch {
-		return askUser(pi, ctx, action, "No judge model available — manual approval required.");
+	} catch (err) {
+		const msg = err instanceof Error ? err.message : String(err);
+		return askUser(pi, ctx, action, `Judge model unavailable: ${msg}`);
 	}
 
 	const recentContext = buildContext(ctx);
